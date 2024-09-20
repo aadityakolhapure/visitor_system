@@ -12,7 +12,8 @@ class Visitor extends Model
     protected $fillable = [
         'unique_id',
         'name',
-        'email',
+        'meet',
+        'phone',
         'purpose',
         'photo',
         'check_in',

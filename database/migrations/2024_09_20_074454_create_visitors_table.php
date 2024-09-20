@@ -17,9 +17,10 @@ class CreateVisitorsTable extends Migration
             $table->id();
             $table->string('unique_id', 10)->unique();
             $table->string('name');
-            $table->string('email');
+            $table->string('phone')->nullable();
             $table->text('purpose');
             $table->string('photo');
+            $table->string('meet'); // Adding the whom_to_meet column
             $table->timestamp('check_in')->useCurrent();
             $table->timestamp('check_out')->nullable();
             $table->timestamps();

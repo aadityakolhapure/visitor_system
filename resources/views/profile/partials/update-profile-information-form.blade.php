@@ -1,4 +1,4 @@
-<section>
+<section class="">
     <header>
         <h2 class="text-lg font-medium text-gray-900">
             {{ __('Profile Information') }}
@@ -49,7 +49,9 @@
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
-
+            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                {{ __('Dashboard') }}
+            </x-nav-link>
             @if (session('status') === 'profile-updated')
                 <p
                     x-data="{ show: true }"

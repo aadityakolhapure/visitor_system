@@ -15,13 +15,36 @@
 
 
       <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-         <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-             <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo">
-             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-         </a>
+         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
+            <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="{{ asset('images/login_logo.png') }}" class="h-10 " alt="Flowbite Logo" style="height: 80px; width: 400px">
+            </a>
          <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-             <a href="{{ url('/visitor/checkout') }}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Checkout</a>
+            @if (Route::has('login'))
+            <div class="flex justify-center">
+                @auth
+                    <!-- Dashboard Button -->
+                    <a href="{{ url('/dashboard') }}"
+                        class="rounded-md bg-blue-500 px-5 py-3 text-white font-medium transition hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-700 mr-5">
+                        Dashboard
+                    </a>
+                @else
+                    <!-- Login Button -->
+                    <a href="{{ route('login') }}"
+                        class="rounded-md bg-gray-800 px-5 py-3 text-white font-medium transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600">
+                        Log in
+                    </a>
+
+                    @if (Route::has('register'))
+                        <!-- Register Button -->
+                        <a href="{{ route('register') }}"
+                            class="rounded-md bg-blue-500 px-5 py-3 text-white font-medium transition hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-700 ml-5">
+                            Register
+                        </a>
+                    @endif
+                @endauth
+            </div>
+        @endif
              <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
                <span class="sr-only">Open main menu</span>
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
@@ -62,32 +85,7 @@
      
              <!-- Action Buttons -->
              <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-                 @if (Route::has('login'))
-                     <div class="flex justify-center">
-                         @auth
-                             <!-- Dashboard Button -->
-                             <a href="{{ url('/dashboard') }}"
-                                 class="rounded-md bg-teal-500 px-5 py-3 text-white font-medium transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-700 mr-5">
-                                 Dashboard
-                             </a>
-                         @else
-                             <!-- Login Button -->
-                             <a href="{{ route('login') }}"
-                                 class="rounded-md bg-gray-800 px-5 py-3 text-white font-medium transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600">
-                                 Log in
-                             </a>
-     
-                             @if (Route::has('register'))
-                                 <!-- Register Button -->
-                                 <a href="{{ route('register') }}"
-                                     class="rounded-md bg-teal-500 px-5 py-3 text-white font-medium transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-700 ml-5">
-                                     Register
-                                 </a>
-                             @endif
-                         @endauth
-                     </div>
-                 @endif
-     
+                
                  <!-- Visitor Button -->
                  <a href="{{ url('/visitor') }}" 
                      class="rounded-md bg-teal-500 px-5 py-3 text-white font-medium transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:focus:ring-teal-700">
@@ -98,6 +96,26 @@
      </section>
      
      
+
+<footer class="fixed bottom-0 left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600">
+    <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
+    </span>
+    <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">About</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline">Contact</a>
+        </li>
+    </ul>
+</footer>
+
      
       
     </body>
