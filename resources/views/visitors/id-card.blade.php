@@ -30,12 +30,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            /* padding: 10px; */
         }
         .header {
             background-color: #003366;
             color: white;
-            padding: 5px;
+            /* padding: 5px; */
             text-align: center;
             font-size: 16px;
             font-weight: bold;
@@ -65,6 +65,9 @@
             font-weight: bold;
             color: #003366;
         }
+        #id-image{
+            margin-left: 50px; 
+        }
         .footer {
             background-color: #003366;
             color: white;
@@ -80,14 +83,14 @@
 <body>
     <div class="id-card flex items-center">
         <div class="header">VISITOR ID CARD</div>
-        <div class="flex justify-center items-center">
+        <div class="flex justify-center items-center ml-10" id="id-image">
             <img src="{{ public_path('storage/' . $visitor->photo) }}" alt="{{ $visitor->name }}" class="photo">
         </div>
         <div class="details flex">
             <p class="unique-id" style="font-size: 20px; font:bold">ID: {{ $visitor->unique_id }}</p>
             <p><strong>Name:</strong> {{ $visitor->name }}</p>
             <p><strong>Phone:</strong> {{ $visitor->phone }}</p>
-            <p><strong>Whom to meet:</strong> {{ $visitor->phone }}</p>
+            <p><strong>Whom to meet:</strong> {{ $visitor->meet }}</p>
             <p><strong>Purpose:</strong> {{ Str::limit($visitor->purpose, 30) }}</p>
             <p><strong>Check-in:</strong> {{ $visitor->check_in->format('Y-m-d H:i') }}</p>
             

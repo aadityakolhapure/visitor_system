@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="flex items-center justify-center flex-1" style="background: linear-gradient(135deg, rgba(134, 0, 140, 0.5), rgba(0, 0, 118, 1));">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 mt-12">
         <!-- Main Heading -->
         <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
             Visitor Registration System
@@ -16,7 +16,7 @@
         <form action="{{ route('visitor.store') }}" method="POST" class="space-y-4">
             @csrf
             <div>
-                <input type="text" name="name" placeholder="Enter your name" class="px-4 py-2 rounded-md w-full" required>
+                <input type="text" name="name" placeholder="Enter your name" class="px-4 py-2 rounded-md w-full " required>
             </div>
             <div>
                 <input type="email" name="email" placeholder="Enter your email" class="px-4 py-2 rounded-md w-full" required>

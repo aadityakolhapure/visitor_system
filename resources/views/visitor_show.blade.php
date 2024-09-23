@@ -6,8 +6,8 @@
     </x-slot>
 
 
-    <div class="container mx-auto sm:ml-64 p-4 mt-16">
-        <div class="container mx-auto">
+    <div class="container sm:ml-64 p-6 mt-16">
+        <div class="container mx-auto m-6">
             <h2 class="text-2xl font-bold mb-4">Visitor Details</h2>
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <div class="flex flex-col md:flex-row items-start md:items-center">
@@ -30,10 +30,20 @@
                         <a href="{{ route('visitor.id-card', $visitor->id) }}" class="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded mr-4">
                             Download PDF
                         </a>
+                        
+                        <form action="{{ route('visitor.destroy', $visitor->id) }}" method="POST" class="mt-4 inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 mr-2" 
+                                    onclick="return confirm('Are you sure you want to delete this visitor?')">
+                                Delete
+                            </button>
+                        </form>
                         <a href="{{ route('visitors') }}" class="inline-block mt-4 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700">
                             Back to Visitors List
                         </a>
                     </div>
+                    
                 </div>
             </div>
             
