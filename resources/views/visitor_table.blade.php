@@ -21,55 +21,7 @@
                 Download CSV
             </a>
         </div>
-        <form method="GET" action="{{ route('visitors') }}" class="mb-4">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Visitors..."
-                class="p-2 border border-gray-300 rounded-lg">
-            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ml-2">
-                Search
-            </button>
-            {{-- </form>
-            <form method="GET" action="{{ route('visitors') }}" class="mb-4">
-            <div class="flex flex-wrap gap-4 items-end">
-                <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
-                    <input type="text" name="search" id="search" value="{{ $filters['search'] }}" placeholder="Search Visitors..."
-                        class="mt-1 p-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-                    <input type="date" name="date" id="date" value="{{ $filters['date'] }}"
-                        class="mt-1 p-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label for="month" class="block text-sm font-medium text-gray-700">Month</label>
-                    <input type="month" name="month" id="month" value="{{ $filters['month'] }}"
-                        class="mt-1 p-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
-                    <input type="number" name="year" id="year" value="{{ $filters['year'] }}" min="2000" max="2099" step="1"
-                        class="mt-1 p-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                        Apply Filters
-                    </button>
-                </div>
-            </div>
-        </form> --}}
-
-            {{-- @if (array_filter($filters))
-        <div class="mb-4 p-4 bg-gray-100 rounded-lg">
-            <h3 class="font-semibold mb-2">Active Filters:</h3>
-            <ul>
-                @foreach ($filters as $key => $value)
-                    @if ($value)
-                        <li>{{ ucfirst($key) }}: {{ $value }}</li>
-                    @endif
-                @endforeach
-            </ul>
-        </div>
-    @endif --}}
+        
 
 
             <table class="min-w-full bg-white  leading-normal" style="border: 2px; border-radius:5px">

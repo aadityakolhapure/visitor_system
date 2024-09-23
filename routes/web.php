@@ -3,8 +3,10 @@ use App\Models\visitor;
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\VisitorTable;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\admincontroller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VisitorController;
+use App\Models\department;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
@@ -51,5 +53,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Route::get('/visitors', VisitorTable::class)->name('visitors');
 });
+
+// Admin routes
+Route::get('/admin/dashboard', [admincontroller::class, 'index'])->middleware(['auth', 'verified'])->name('admin.dashboard');
+
+
+Route::get('/admin/addDepartment', [admincontroller::class, 'createDepartment'])->name('departments');
+Route::get('/admin/departments', [AdminController::class, 'showDepartments'])->name('admin.departments');
+Route::get('/admin/dashboard', [AdminController::class, 'showVisitors'])->name('admin.visitors');
+Route::post('/admin/departments', [AdminController::class, 'store'])->name('admin.departments.store');
+Route::delete('/admin/departments/{id}', [AdminController::class, 'destroy'])->name('admin.departments.destroy');
 
 require __DIR__.'/auth.php';

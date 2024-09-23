@@ -35,13 +35,13 @@
                         Log in
                     </a>
 
-                    {{-- @if (Route::has('register'))
+                    @if (Route::has('register'))
                         <!-- Register Button -->
                         <a href="{{ route('register') }}"
                             class="rounded-md bg-blue-500 px-5 py-3 text-white font-medium transition hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-700 ml-5 hide">
                             Register
                         </a>
-                    @endif --}}
+                    @endif
                 @endauth
             </div>
         @endif
