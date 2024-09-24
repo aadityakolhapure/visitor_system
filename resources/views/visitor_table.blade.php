@@ -51,7 +51,7 @@
                                 </a>
 
                                 <!-- Check Out Button -->
-                                @if (is_null($visitor->check_out))
+                                {{-- @if (is_null($visitor->check_out))
                                     <form method="POST" action="{{ route('visitor.checkout', $visitor->id) }}">
                                         @csrf
                                         <button type="submit"
@@ -64,7 +64,7 @@
                                         class="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out shadow-lg hidden">
                                         Check Out
                                     </button>
-                                @endif
+                                @endif --}}
                             </td>
 
 

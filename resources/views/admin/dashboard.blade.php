@@ -30,7 +30,7 @@
                     {{ session('error') }}
                 </div>
             @endif
-            <form method="POST" action="{{ route('visitors.checkout') }}">
+            <form method="POST" action="{{ route('admin.visitors.checkout') }}">
                 @csrf
                 <div class="mb-4">
                     <label for="unique_id" class="block text-gray-700 text-sm font-bold mb-2">Unique ID:</label>

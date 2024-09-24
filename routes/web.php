@@ -27,6 +27,8 @@ Route::get('/dashboard/visitors/export', [VisitorController::class, 'exportCSV']
 Route::get('/dashboard/visitor-graph', [VisitorController::class, 'visitorGraph'])->name('visitor.graph');
 
 
+
+
 Route::get('/dashboard/visitors', [VisitorController::class, 'index'])->name('visitors');
 Route::delete('/visitors/{id}', [VisitorController::class, 'destroy'])->name('visitor.destroy');
 Route::delete('/dashboard', [VisitorController::class, 'homePage'])->name('home');
@@ -63,5 +65,24 @@ Route::get('/admin/departments', [AdminController::class, 'showDepartments'])->n
 Route::get('/admin/dashboard', [AdminController::class, 'showVisitors'])->name('admin.visitors');
 Route::post('/admin/departments', [AdminController::class, 'store'])->name('admin.departments.store');
 Route::delete('/admin/departments/{id}', [AdminController::class, 'destroy'])->name('admin.departments.destroy');
+
+Route::get('/admin/visitors',[AdminController::class, 'visitorList'])->name('admin.visitors1');
+Route::get('/admin/visitor/{unique_id}',[AdminController::class, 'show'])->name('admin.visitor.show');
+Route::delete('/admin/visitors/{id}', [admincontroller::class, 'destroyVisitors'])->name('admin.visitor.destroy');
+Route::post('/admin/visitor/checkout', [admincontroller::class, 'checkout'])->name('admin.visitors.checkout');
+Route::get('/admin/visitors/export', [admincontroller::class, 'exportCSV'])->name('admin.visitors.export');
+// Route::get('/admin/visitors/', [admincontroller::class, 'index1'])->name('admin.visitors.from.details');
+
+// add user route
+// Route::get('/admin/addusers', [admincontroller::class, 'addUsers'])->name('admin.addusers');
+// Route::get('/admin/create', [admincontroller::class, 'create'])->name('users.create');
+// Route::post('/users', [admincontroller::class, 'store1'])->name('users.store');
+Route::get('/admin/users/create', [AdminController::class, 'create'])->name('users.create');
+Route::post('/admin/users', [AdminController::class, 'store1'])->name('users.store');
+Route::get('/admin/users', [AdminController::class, 'showUsers'])->name('admin.users');
+Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
+Route::put('/admin/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
+Route::put('/admin/users/', [AdminController::class, 'showvisitors1'])->name('show.visitors1');
+
 
 require __DIR__.'/auth.php';
