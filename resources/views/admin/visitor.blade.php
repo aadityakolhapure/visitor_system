@@ -1,50 +1,42 @@
 <x-app-layout>
     <x-slot name="header">
-        {{-- <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2> --}}
+        {{-- Removed header text for a cleaner look --}}
     </x-slot>
 
     <div class="container mx-auto sm:ml-64 p-6 mt-16">
         <!-- Success Message -->
         @if (session('success'))
-            <div class="bg-green-200 text-white p-4 rounded-lg mb-4">
+            <div class="bg-green-100 border border-green-400 text-green-700 p-4 rounded-lg mb-4">
                 {{ session('success') }}
             </div>
         @endif
 
-        <!-- Page Title and Search Form -->
-        <div class="flex justify-between items-center mb-6 mt-8 p-4">
-            <h2 class="text-2xl font-bold">Visitor List</h2>
+        <!-- Page Title and Actions -->
+        <div class="flex justify-between items-center mb-8 mt-8 p-4 bg-white shadow-md rounded-lg">
+            <h2 class="text-2xl font-bold text-green-700">Visitor List</h2>
             
-            <!-- Search Form -->
-            <form action="{{ route('show.visitors1') }}" method="GET" class="flex items-center">
-                <input type="text" name="search" placeholder="Search users..." class="form-input rounded-md shadow-sm mt-1 block w-full" value="{{ request('search') }}">
-                <button type="submit" class="ml-4 px-4 py-2 bg-gray-800 text-white rounded-md">Search</button>
-            </form>
-
             <!-- Download CSV Button -->
-            <a href="{{ route('admin.visitors.export') }}" class="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-lg ml-4">
+            <a href="{{ route('admin.visitors.export') }}" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
                 Download CSV
             </a>
         </div>
 
         <!-- Visitor Table -->
-        <div class="overflow-x-auto bg-white rounded-lg shadow-lg ">
-            <table class="min-w-full leading-normal">
+        <div class="overflow-x-auto bg-white rounded-lg shadow-lg">
+            <table class="min-w-full table-auto leading-normal text-left">
                 <thead>
-                    <tr class="bg-gray-300">
-                        <th class="py-2 px-4 text-left font-semibold text-gray-700">Unique ID</th>
-                        <th class="py-2 px-4 text-left font-semibold text-gray-700">Name</th>
-                        <th class="py-2 px-4 text-left font-semibold text-gray-700">Phone</th>
-                        <th class="py-2 px-4 text-left font-semibold text-gray-700">Check In</th>
-                        <th class="py-2 px-4 text-left font-semibold text-gray-700">Check Out</th>
-                        <th class="py-2 px-4 text-left font-semibold text-gray-700">Actions</th>
+                    <tr class="bg-green-100 text-green-900">
+                        <th class="py-2 px-4 font-semibold">Unique ID</th>
+                        <th class="py-2 px-4 font-semibold">Name</th>
+                        <th class="py-2 px-4 font-semibold">Phone</th>
+                        <th class="py-2 px-4 font-semibold">Check In</th>
+                        <th class="py-2 px-4 font-semibold">Check Out</th>
+                        <th class="py-2 px-4 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($visitors as $visitor)
-                        <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-200">
+                        <tr class="border-b border-gray-200 hover:bg-green-50 transition duration-200">
                             <td class="px-4 py-2">{{ $visitor->unique_id }}</td>
                             <td class="px-4 py-2">{{ $visitor->name }}</td>
                             <td class="px-4 py-2">{{ $visitor->phone ?? 'N/A' }}</td>
@@ -53,7 +45,7 @@
                             <td class="px-4 py-2 flex space-x-2">
                                 <!-- Details Button -->
                                 <a href="{{ route('admin.visitor.show', $visitor->unique_id) }}" 
-                                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg transition duration-300 ease-in-out">
+                                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
                                     Details
                                 </a>
                             </td>
@@ -64,8 +56,8 @@
         </div>
 
         <!-- Pagination -->
-        <div class="mt-4">
-            {{ $visitors->links() }}
+        <div class="mt-6 flex justify-end">
+            {{ $visitors->links('pagination::tailwind') }}
         </div>
     </div>
 
@@ -73,3 +65,42 @@
         // Modal handling or any additional JavaScript functionality
     </script>
 </x-app-layout>
+
+<!-- Additional CSS for Design -->
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 0.75rem;
+    }
+
+    th {
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.05rem;
+    }
+
+    td {
+        font-size: 0.95rem;
+    }
+
+    tr:hover {
+        background-color: #f0f9f4; /* Light green hover effect */
+    }
+
+    .shadow-md {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Button Transition */
+    a {
+        transition: transform 0.3s ease;
+    }
+
+    a:hover {
+        transform: translateY(-2px);
+    }
+</style>

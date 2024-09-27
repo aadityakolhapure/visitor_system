@@ -12,6 +12,7 @@ class Visitor extends Model
     protected $fillable = [
         'unique_id',
         'name',
+        'department_id', 'member_count',
         'meet',
         'phone',
         'purpose',
@@ -24,4 +25,9 @@ class Visitor extends Model
         'check_in' => 'datetime',
         'check_out' => 'datetime',
     ];
+
+    public function members()
+    {
+        return $this->hasMany(VisitorMember::class);
+    }
 }

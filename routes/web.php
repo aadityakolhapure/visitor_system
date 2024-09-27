@@ -82,7 +82,10 @@ Route::post('/admin/users', [AdminController::class, 'store1'])->name('users.sto
 Route::get('/admin/users', [AdminController::class, 'showUsers'])->name('admin.users');
 Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
 Route::put('/admin/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
-Route::put('/admin/users/', [AdminController::class, 'showvisitors1'])->name('show.visitors1');
+Route::put('/admin/users/', [AdminController::class, 'showvisitorslist'])->name('admin.show.visitors');
+Route::get('/admin/visitor-stats', [AdminController::class, 'getVisitorStats'])->name('admin.visitor-stats');
+Route::get('/admin/visitor-graph', [admincontroller::class, 'visitorGraph'])->name('admin.visitor.graph');
+Route::get('/admin/quick-stats', [AdminController::class, 'getQuickStats'])->name('admin.quick-stats');
 
 
 require __DIR__.'/auth.php';

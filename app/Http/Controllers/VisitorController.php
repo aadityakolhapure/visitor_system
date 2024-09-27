@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Visitor;
+use App\Models\VisitorMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PDF;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
@@ -20,33 +22,88 @@ class VisitorController extends Controller
         return view('visitors.create');
     }
 
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'phone' => 'required|string|max:255',
+    //         'meet' => 'required|string|max:255',
+    //         'purpose' => 'required|string|max:1000',
+    //         'photo' => 'required|string',
+    //     ]);
+
+    //     $uniqueId = $this->generateUniqueId();
+
+    //     $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['photo']));
+    //     $filename = 'visitor_' . $uniqueId . '_' . time() . '.jpg';
+    //     Storage::disk('public')->put('visitor_photos/' . $filename, $image);
+
+    //     $visitor = Visitor::create([
+    //         'unique_id' => $uniqueId,
+    //         'name' => $validated['name'],
+    //         'phone' => $validated['phone'],
+    //         'meet' => $validated['meet'],
+    //         'purpose' => $validated['purpose'],
+    //         'photo' => 'visitor_photos/' . $filename,
+    //     ]);
+
+    //     return redirect()->route('visitor.preview', $visitor->id);
+    // }
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'meet' => 'required|string|max:255',
-            'purpose' => 'required|string|max:1000',
-            'photo' => 'required|string',
-        ]);
+        try {
+            Log::info('Visitor registration attempt', $request->all());
 
-        $uniqueId = $this->generateUniqueId();
+            $validatedData = $request->validate([
+                'member_count' => 'required|integer|min:1|max:4',
+                'names' => 'required|array|min:1|max:4',
+                'names.*' => 'required|string|max:255',
+                'phone' => 'required|string|max:255',
+                'meet' => 'required|string|max:255',
+                'purpose' => 'required|string',
+                'photo' => 'required|image|max:2048',
+            ]);
 
-        $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['photo']));
-        $filename = 'visitor_' . $uniqueId . '_' . time() . '.jpg';
-        Storage::disk('public')->put('visitor_photos/' . $filename, $image);
+            Log::info('Validation passed', $validatedData);
 
-        $visitor = Visitor::create([
-            'unique_id' => $uniqueId,
-            'name' => $validated['name'],
-            'phone' => $validated['phone'],
-            'meet' => $validated['meet'],
-            'purpose' => $validated['purpose'],
-            'photo' => 'visitor_photos/' . $filename,
-        ]);
+            DB::beginTransaction();
 
-        return redirect()->route('visitor.preview', $visitor->id);
+            // Process the photo...
+            $photoPath = $request->file('photo')->store('visitor_photos', 'public');
+
+            $visitor = new Visitor();
+            $visitor->unique_id = $this->generateUniqueId();
+            $visitor->phone = $validatedData['phone'];
+            $visitor->member_count = $validatedData['member_count'];
+            $visitor->purpose = $validatedData['purpose'];
+            $visitor->photo = $photoPath;
+            $visitor->meet = $validatedData['meet'];
+            $visitor->check_in = now();
+            $visitor->save();
+
+            Log::info('Visitor saved', ['visitor_id' => $visitor->id]);
+
+            // Store individual member names
+            foreach ($validatedData['names'] as $name) {
+                VisitorMember::create([
+                    'visitor_id' => $visitor->id,
+                    'name' => $name,
+                ]);
+            }
+
+            Log::info('Visitor members saved');
+
+            DB::commit();
+
+            return redirect()->route('visitor.preview', $visitor->id)->with('success', 'Visitor registered successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error in visitor registration: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withInput()->with('error', 'An error occurred while registering the visitor. Please try again.');
+        }
     }
+
 
     public function preview($id)
     {

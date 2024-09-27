@@ -6,11 +6,12 @@ use App\Models\Department;
 use App\Models\Visitor;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
@@ -220,9 +221,9 @@ class AdminController extends Controller
 
         if ($request->has('search')) {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('email', 'LIKE', "%{$searchTerm}%");
+                    ->orWhere('email', 'LIKE', "%{$searchTerm}%");
             });
         }
 
@@ -231,15 +232,15 @@ class AdminController extends Controller
         return view('admin.user_show', compact('users'));
     }
 
-    public function showvisitors1(Request $request)
+    public function showvisitorslist(Request $request)
     {
         $query = Visitor::query();
 
         if ($request->has('searchs')) {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('phone', 'LIKE', "%{$searchTerm}%");
+                    ->orWhere('phone', 'LIKE', "%{$searchTerm}%");
             });
         }
 
@@ -271,5 +272,96 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.users')->with('success', 'User updated successfully.');
+    }
+
+    public function getVisitorStats()
+    {
+        $stats = Visitor::selectRaw('DATE_FORMAT(check_in, "%Y-%m") as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $labels = $stats->pluck('month')->map(function ($month) {
+            return Carbon::createFromFormat('Y-m', $month)->format('M Y');
+        });
+        $visitors = $stats->pluck('count');
+
+        // Calculate additional stats
+        $totalVisitors = Visitor::count();
+        $thisMonthVisitors = Visitor::whereMonth('check_in', Carbon::now()->month)->count();
+        $todayVisitors = Visitor::whereDate('check_in', Carbon::today())->count();
+
+        return response()->json([
+            'labels' => $labels,
+            'visitors' => $visitors,
+            'totalVisitors' => $totalVisitors,
+            'thisMonthVisitors' => $thisMonthVisitors,
+            'todayVisitors' => $todayVisitors,
+        ]);
+    }
+
+    public function getQuickStats()
+    {
+        // Use cache to reduce database queries, but with a short expiration
+        return Cache::remember('quick_stats', 60, function () {
+            $now = Carbon::now();
+
+            $totalVisitors = Visitor::count();
+            $thisMonthVisitors = Visitor::whereYear('check_in', $now->year)
+                                        ->whereMonth('check_in', $now->month)
+                                        ->count();
+            $todayVisitors = Visitor::whereDate('check_in', $now->toDateString())->count();
+
+            return response()->json([
+                'totalVisitors' => number_format($totalVisitors),
+                'thisMonthVisitors' => number_format($thisMonthVisitors),
+                'todayVisitors' => number_format($todayVisitors)
+            ]);
+        });
+    }
+
+    public function visitorGraph(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->year);
+
+        // Get visitor counts for the selected year
+        $visitorCounts = Visitor::select(
+            DB::raw('DATE_FORMAT(check_in, "%Y-%m") as month'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->whereYear('check_in', $year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Prepare data for the chart
+        $labels = [];
+        $data = [];
+        $startDate = Carbon::create($year, 1, 1);
+
+        for ($month = 1; $month <= 12; $month++) {
+            $monthKey = $startDate->copy()->month($month)->format('Y-m');
+            $count = $visitorCounts->where('month', $monthKey)->first()->count ?? 0;
+
+            $labels[] = $startDate->copy()->month($month)->format('M');
+            $data[] = $count;
+        }
+
+        // Get list of years for the dropdown
+        $years = Visitor::selectRaw('YEAR(check_in) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        return view('admin.chart', compact('labels', 'data', 'years', 'year'));
+    }
+
+    public function getVisitors()
+    {
+        $visitors = Visitor::orderBy('check_in', 'desc')
+            ->take(100)  // Limit to the last 100 visitors for performance
+            ->get(['unique_id', 'name', 'phone', 'check_in', 'check_out', 'purpose', 'meet', 'photo']);
+
+        return response()->json($visitors);
     }
 }

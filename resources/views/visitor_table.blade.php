@@ -5,76 +5,72 @@
         </h2> --}}
     </x-slot>
 
-
     <div class="container mx-auto sm:ml-64 p-6 mt-16">
         @if (session('success'))
-            <div class="bg-green-200 text-white p-4 rounded-lg mb-4">
+            <div class="bg-green-200 text-green-900 p-4 rounded-lg mb-4">
                 {{ session('success') }}
             </div>
         @endif
 
-
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold mb-4">Visitor List</h2>
+        <div class="flex justify-between items-center mb-4 m-4">
+            <h2 class="text-2xl font-bold mb-4 text-green-800">Visitor List</h2>
             <a href="{{ route('visitors.export') }}"
-                class="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-lg m-3">
+                class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transition duration-300 ease-in-out">
                 Download CSV
             </a>
         </div>
-        
-
-
-            <table class="min-w-full bg-white  leading-normal" style="border: 2px; border-radius:5px">
-                <thead>
-                    <tr class="bg-gray-300" style="border: 2px; border-radius:5px">
-                        <th class="py-2">Unique ID</th>
-                        <th class="py-2">Name</th>
-                        <th class="py-2">Phone</th>
-                        <th class="py-2">Check In</th>
-                        <th class="py-2">Check Out</th>
-                        <th class="py-2">Actions</th>
+        <div class="w-full overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow-lg overflow-hidden">
+                <thead class="bg-green-100">
+                    <tr>
+                        <th class="py-3 px-6 text-left text-green-800 font-semibold">Unique ID</th>
+                        <th class="py-3 px-6 text-left text-green-800 font-semibold">Name</th>
+                        <th class="py-3 px-6 text-left text-green-800 font-semibold">Phone</th>
+                        <th class="py-3 px-6 text-left text-green-800 font-semibold">Check In</th>
+                        <th class="py-3 px-6 text-left text-green-800 font-semibold">Check Out</th>
+                        <th class="py-3 px-6 text-left text-green-800 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($visitors as $visitor)
-                        <tr class="border-b">
-                            <td class="px-6 py-4">{{ $visitor->unique_id }}</td>
-                            <td class="px-6 py-4">{{ $visitor->name }}</td>
-                            <td class="px-6 py-4">{{ $visitor->phone ?? 'N/A' }}</td>
-                            <td class="px-6 py-4">{{ $visitor->check_in }}</td>
-                            <td class="px-6 py-4">{{ $visitor->check_out ?? 'Not checked out' }}</td>
+                        <tr class="border-b hover:bg-green-50 transition duration-200 ease-in-out">
+                            <td class="px-6 py-4 text-gray-700">{{ $visitor->unique_id }}</td>
+                            <td class="px-6 py-4 text-gray-700">{{ $visitor->name }}</td>
+                            <td class="px-6 py-4 text-gray-700">{{ $visitor->phone ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 text-gray-700">{{ $visitor->check_in }}</td>
+                            <td class="px-6 py-4 text-gray-700">{{ $visitor->check_out ?? 'Not checked out' }}</td>
                             <td class="px-6 py-4 flex space-x-2">
                                 <!-- Details Button -->
                                 <a href="{{ route('visitor.show', $visitor->unique_id) }}"
-                                    class="bg-blue-700 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out shadow-lg">
+                                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg transition duration-300 ease-in-out">
                                     Details
                                 </a>
 
                                 <!-- Check Out Button -->
-                                {{-- @if (is_null($visitor->check_out))
-                                    <form method="POST" action="{{ route('visitor.checkout', $visitor->id) }}">
-                                        @csrf
-                                        <button type="submit"
-                                            class="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out shadow-lg">
-                                            Check Out
-                                        </button>
-                                    </form>
-                                @else
-                                    <button
-                                        class="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out shadow-lg hidden">
-                                        Check Out
-                                    </button>
-                                @endif --}}
+                                {{-- Uncomment the following block if you want to allow check out --}}
+                                {{-- @if (is_null($visitor->check_out)) --}}
+                                {{-- <form method="POST" action="{{ route('visitor.checkout', $visitor->id) }}">
+                                @csrf
+                                <button type="submit" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transition duration-300 ease-in-out">
+                                    Check Out
+                                </button>
+                            </form>
+                        {{-- @else --}}
+                                {{-- <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg" disabled>
+                                Checked Out
+                            </button>
+                        {{-- @endif --}}
                             </td>
-
-
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            <div class="mt-4">
-                {{ $visitors->links() }}
-            </div>
+        </div>
+
+
+        <div class="mt-4">
+            {{ $visitors->links() }}
+        </div>
     </div>
 
     <script>
