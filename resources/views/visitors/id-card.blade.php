@@ -90,7 +90,7 @@
             <p class="unique-id" style="font-size: 20px; font:bold">ID: {{ $visitor->unique_id }}</p>
             <p><strong>Name:</strong> {{ $visitor->name }}</p>
             <p><strong>Phone:</strong> {{ $visitor->phone }}</p>
-            <p><strong>Whom to meet:</strong> {{ $visitor->meet }}</p>
+            <p><strong>Whom to meet:</strong> {{ $visitor->meetUser ? $visitor->meetUser->name : 'N/A' }}</p>
             <p><strong>Purpose:</strong> {{ Str::limit($visitor->purpose, 30) }}</p>
             <p><strong>Check-in:</strong> {{ $visitor->check_in->format('Y-m-d H:i') }}</p>
             

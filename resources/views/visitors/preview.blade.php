@@ -31,7 +31,6 @@
     </style>
 </head>
 <body class="bg-gray-100 p-8">
-
     <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl p-8 fade-in">
         <h2 class="text-3xl font-bold mb-6 text-center text-gray-700">Visitor Details</h2>
         <div class="mb-6">
@@ -39,11 +38,47 @@
         </div>
         <div class="space-y-2">
             <p class="text-lg"><strong>Name:</strong> <span class="text-gray-600">{{ $visitor->name }}</span></p>
+            <p class="text-lg"><strong>Member Count:</strong> <span class="text-gray-600">{{ $visitor->member_count }}</span></p>
             <p class="text-lg"><strong>Phone Number:</strong> <span class="text-gray-600">{{ $visitor->phone }}</span></p>
-            <p class="text-lg"><strong>Whom to Meet:</strong> <span class="text-gray-600">{{ $visitor->meet }}</span></p>
+            <p class="text-lg"><strong>Whom to Meet:</strong> <span class="text-gray-600">{{ $visitor->meetUser ? $visitor->meetUser->name : 'N/A' }}</span></p>
             <p class="text-lg"><strong>Purpose:</strong> <span class="text-gray-600">{{ $visitor->purpose }}</span></p>
             <p class="text-lg"><strong>Unique ID:</strong> <span class="text-gray-600">{{ $visitor->unique_id }}</span></p>
         </div>
+
+        @if($visitor->member_count > 0)
+            <div class="mt-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-700">Additional Members</h3>
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b">Member</th>
+                            <th class="py-2 px-4 border-b">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($visitor->member1)
+                            <tr>
+                                <td class="py-2 px-4 border-b">Member 1</td>
+                                <td class="py-2 px-4 border-b">{{ $visitor->member1 }}</td>
+                            </tr>
+                        @endif
+                        @if($visitor->member2)
+                            <tr>
+                                <td class="py-2 px-4 border-b">Member 2</td>
+                                <td class="py-2 px-4 border-b">{{ $visitor->member2 }}</td>
+                            </tr>
+                        @endif
+                        @if($visitor->member3)
+                            <tr>
+                                <td class="py-2 px-4 border-b">Member 3</td>
+                                <td class="py-2 px-4 border-b">{{ $visitor->member3 }}</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
         <div class="flex justify-between mt-6">
             <a href="{{ route('visitor.id-card', $visitor->id) }}" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
                 Download PDF
@@ -53,6 +88,5 @@
             </button>
         </div>
     </div>
-    
 </body>
 </html>

@@ -63,7 +63,7 @@
                                                 <td class="px-6 py-4">{{ $visitor->check_in }}</td>
                                                 <td class="px-6 py-4">{{ $visitor->check_out ?? 'Not checked out' }}</td>
                                                 <td class="px-6 py-4">
-                                                    <button onclick="openVisitorDetails('{{ $visitor->unique_id }}', '{{ $visitor->name }}', '{{ $visitor->phone }}', '{{ $visitor->check_in }}', '{{ $visitor->check_out }}', '{{ $visitor->purpose }}', '{{ $visitor->meet }}', '{{ asset('storage/' . $visitor->photo) }}')" class="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded">
+                                                    <button onclick="openVisitorDetails('{{ $visitor->unique_id }}', '{{ $visitor->name }}', '{{ $visitor->phone }}', '{{ $visitor->check_in }}', '{{ $visitor->check_out }}', '{{ $visitor->purpose }}', '{{ $visitor->meetUser ? $visitor->meetUser->name : 'N/A' }}', '{{ asset('storage/' . $visitor->photo) }}')" class="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded">
                                                         Details
                                                     </button>
                                                 </td>

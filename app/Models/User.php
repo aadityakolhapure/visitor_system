@@ -37,6 +37,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function visitorsToMeet()
+    {
+        return $this->hasMany(Visitor::class, 'meet_user_id');
+    }
     protected function casts(): array
     {
         return [

@@ -86,6 +86,7 @@ Route::put('/admin/users/', [AdminController::class, 'showvisitorslist'])->name(
 Route::get('/admin/visitor-stats', [AdminController::class, 'getVisitorStats'])->name('admin.visitor-stats');
 Route::get('/admin/visitor-graph', [admincontroller::class, 'visitorGraph'])->name('admin.visitor.graph');
 Route::get('/admin/quick-stats', [AdminController::class, 'getQuickStats'])->name('admin.quick-stats');
-
+Route::get('/api/users-by-department/{department}', [VisitorController::class, 'getUsersByDepartment']);
+Route::get('/api/users-by-department/{departmentId?}', [VisitorController::class, 'getUsersByDepartment']);
 
 require __DIR__.'/auth.php';

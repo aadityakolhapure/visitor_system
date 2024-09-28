@@ -47,7 +47,8 @@
     <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
             <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="{{ asset('images/login_logo.png') }}" class="h-10 " alt="Flowbite Logo" style="height: 80px; width: 280px">
+                <img src="{{ asset('images/login_logo.png') }}" class="h-10 " alt="Flowbite Logo"
+                    style="height: 80px; width: 280px">
             </a>
 
             <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse m-3">
@@ -57,7 +58,8 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-4">Checkout</a>
             </div>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <ul
+                    class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <h2 class="text-4xl font-extrabold dark:text-white">Welcome To Dnyanshree</h2>
                 </ul>
             </div>
@@ -66,56 +68,98 @@
 
     <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl p-8 mt-16 fade-in m-4">
         <h2 class="text-3xl font-bold mb-6 text-center text-gray-700 m-4">Visitor Registration</h2>
-          <!-- Error Alert -->
-    <div id="error-alert" class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-        <span class="font-medium">Danger alert!</span> Please capture a photo before registering.
-    </div>
-        <form method="POST" action="{{ route('visitor.store') }}" enctype="multipart/form-data" id="visitorForm">
+        <!-- Error Alert -->
+        <div id="error-alert"
+            class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert">
+            <span class="font-medium">Danger alert!</span> Please capture a photo before registering.
+        </div>
+        <form method="POST" action="{{ route('visitor.store') }}" id="visitorForm">
             @csrf
 
-            @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <span class="block sm:inline">{{ session('error') }}</span>
-            </div>
-        @endif
-    
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+            @if (session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                    role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div>
                 <div class="mb-4">
-                    <label for="member_count" class="block text-gray-700 text-sm font-bold mb-2">Number of Members:</label>
-                    <input type="number" id="member_count" name="member_count" min="1" max="4" value="1" required
+                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+                    <input type="text" id="name" name="name" required
                         class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
                 </div>
-                <div id="member_names">
-                    <div class="mb-4">
-                        <label for="name_1" class="block text-gray-700 text-sm font-bold mb-2">Name of Member 1:</label>
-                        <input type="text" id="name_1" name="names[]" required
-                            class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
-                    </div>
-                </div>
+
                 {{-- <div class="mb-4">
                     <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
                     <input type="text" id="name" name="name" required
                         class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
                 </div> --}}
+
+                <div class="mb-4">
+                    <label for="member_count" class="block text-gray-700 text-sm font-bold mb-2">Number of Additional
+                        Members:</label>
+                    <input type="number" id="member_count" name="member_count" min="0" max="3"
+                        value="0" required
+                        class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+                </div>
+
+                <div id="member_names">
+                    <div class="mb-4 hidden" id="member1_div">
+                        <label for="member1" class="block text-gray-700 text-sm font-bold mb-2">Name of Member
+                            1:</label>
+                        <input type="text" id="member1" name="member1"
+                            class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+                    </div>
+                    <div class="mb-4 hidden" id="member2_div">
+                        <label for="member2" class="block text-gray-700 text-sm font-bold mb-2">Name of Member
+                            2:</label>
+                        <input type="text" id="member2" name="member2"
+                            class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+                    </div>
+                    <div class="mb-4 hidden" id="member3_div">
+                        <label for="member3" class="block text-gray-700 text-sm font-bold mb-2">Name of Member
+                            3:</label>
+                        <input type="text" id="member3" name="member3"
+                            class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+                    </div>
+                </div>
+
                 <div class="mb-4">
                     <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone Number:</label>
                     <input type="text" id="phone" name="phone" required
                         class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
                 </div>
+
+                <div class="mb-4">
+                    <label for="department" class="block text-gray-700 text-sm font-bold mb-2">Department:</label>
+                    <select id="department" name="department" required
+                        class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+                        <option value="">Select Department</option>
+                        @foreach($departments as $department)
+                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+    
                 <div class="mb-4">
                     <label for="meet" class="block text-gray-700 text-sm font-bold mb-2">Whom to Meet:</label>
-                    <input type="text" id="meet" name="meet" required
+                    <select id="meet" name="meet" required
                         class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+                        <option value="">Select Person</option>
+                    </select>
                 </div>
+
                 <div class="mb-4">
                     <label for="purpose" class="block text-gray-700 text-sm font-bold mb-2">Purpose of Visit:</label>
                     <textarea id="purpose" name="purpose" required
@@ -164,7 +208,8 @@
 
     <footer class="bg-white border-t border-gray-200 shadow-lg py-4 mt-8">
         <div class="max-w-screen-xl mx-auto text-center">
-            <span class="text-sm text-gray-500">© 2023 <a href="#" class="hover:underline">Your Company™</a>. All Rights Reserved.</span>
+            <span class="text-sm text-gray-500">© 2023 <a href="#" class="hover:underline">Your Company™</a>.
+                All Rights Reserved.</span>
         </div>
     </footer>
 
@@ -180,7 +225,7 @@
         const confirmationMessage = document.getElementById('confirmation-message');
         const visitorForm = document.getElementById('visitorForm');
         const errorAlert = document.getElementById('error-alert');
-    
+
         // Access the user's camera
         navigator.mediaDevices.getUserMedia({
                 video: true
@@ -191,7 +236,7 @@
             .catch(err => {
                 console.error("Error accessing the camera: ", err);
             });
-    
+
         // Capture photo
         captureButton.addEventListener('click', () => {
             canvas.width = video.videoWidth;
@@ -202,20 +247,20 @@
             photoData.value = photoSrc; // Store base64 image data
             photoModal.classList.remove('hidden'); // Show modal
         });
-    
+
         // Retake button
         retakeButton.addEventListener('click', () => {
             // Clear photo data to prevent saving the previous photo
             photoData.value = '';
             photoModal.classList.add('hidden'); // Hide modal
         });
-    
+
         // OK button
         okButton.addEventListener('click', () => {
             photoModal.classList.add('hidden'); // Hide modal
             confirmationMessage.classList.remove('hidden'); // Show confirmation message
         });
-    
+
         // Form submission
         visitorForm.addEventListener('submit', (event) => {
             if (!photoData.value) { // Check if photo is captured
@@ -227,42 +272,75 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-        const memberCount = document.getElementById('member_count');
-        const memberNames = document.getElementById('member_names');
+            const memberCount = document.getElementById('member_count');
+            const member1Div = document.getElementById('member1_div');
+            const member2Div = document.getElementById('member2_div');
+            const member3Div = document.getElementById('member3_div');
+            const departmentSelect = document.getElementById('department');
+            const meetSelect = document.getElementById('meet');
 
-        function updateMemberFields() {
-            const count = parseInt(memberCount.value);
-            const currentFields = memberNames.children.length;
-
-            if (count > currentFields) {
-                // Add fields
-                for (let i = currentFields + 1; i <= count; i++) {
-                    const div = document.createElement('div');
-                    div.className = 'mb-4';
-                    div.innerHTML = `
-                        <label for="name_${i}" class="block text-gray-700 text-sm font-bold mb-2">Name of Member ${i}:</label>
-                        <input type="text" id="name_${i}" name="names[]" required
-                            class="form-input shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
-                    `;
-                    memberNames.appendChild(div);
+            departmentSelect.addEventListener('change', function() {
+                const departmentId = this.value;
+                if (departmentId) {
+                    fetch(`/api/users-by-department/${departmentId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            meetSelect.innerHTML = '<option value="">Select Person</option>';
+                            data.forEach(user => {
+                                const option = document.createElement('option');
+                                option.value = user.id;
+                                option.textContent = user.name;
+                                meetSelect.appendChild(option);
+                            });
+                        });
+                } else {
+                    meetSelect.innerHTML = '<option value="">Select Person</option>';
                 }
-            } else if (count < currentFields) {
-                // Remove fields
-                for (let i = currentFields; i > count; i--) {
-                    memberNames.removeChild(memberNames.lastChild);
+            });
+
+            function updateMemberFields() {
+                const count = parseInt(memberCount.value);
+
+                if (count >= 1) {
+                    member1Div.classList.remove('hidden');
+                    member1Div.querySelector('input').required = true;
+                } else {
+                    member1Div.classList.add('hidden');
+                    member1Div.querySelector('input').required = false;
+                    member1Div.querySelector('input').value = '';
+                }
+
+                if (count >= 2) {
+                    member2Div.classList.remove('hidden');
+                    member2Div.querySelector('input').required = true;
+                } else {
+                    member2Div.classList.add('hidden');
+                    member2Div.querySelector('input').required = false;
+                    member2Div.querySelector('input').value = '';
+                }
+
+                if (count >= 3) {
+                    member3Div.classList.remove('hidden');
+                    member3Div.querySelector('input').required = true;
+                } else {
+                    member3Div.classList.add('hidden');
+                    member3Div.querySelector('input').required = false;
+                    member3Div.querySelector('input').value = '';
                 }
             }
-        }
 
-        memberCount.addEventListener('change', updateMemberFields);
-        memberCount.addEventListener('input', updateMemberFields);
+            memberCount.addEventListener('change', updateMemberFields);
+            memberCount.addEventListener('input', updateMemberFields);
 
-        document.getElementById('visitorForm').addEventListener('submit', function(e) {
-            console.log('Form submitted');
-            // Uncomment the next line to see form data in console
-            // console.log(new FormData(this));
+            // Call updateMemberFields initially to set the correct state
+            updateMemberFields();
+
+            document.getElementById('visitorForm').addEventListener('submit', function(e) {
+                console.log('Form submitted');
+                // Uncomment the next line to see form data in console
+                // console.log(new FormData(this));
+            });
         });
-    });
     </script>
 
 </body>

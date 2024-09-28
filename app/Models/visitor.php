@@ -12,13 +12,16 @@ class Visitor extends Model
     protected $fillable = [
         'unique_id',
         'name',
-        'department_id', 'member_count',
-        'meet',
+        'member_count',
+        'member1',
+        'member2',
+        'member3',
         'phone',
+        'department_id',
+        'meet_user_id',
+        'meet',
         'purpose',
         'photo',
-        'check_in',
-        'check_out',
     ];
 
     protected $casts = [
@@ -26,8 +29,13 @@ class Visitor extends Model
         'check_out' => 'datetime',
     ];
 
-    public function members()
+    public function department()
     {
-        return $this->hasMany(VisitorMember::class);
+        return $this->belongsTo(Department::class);
+    }
+    
+    public function meetUser()
+    {
+        return $this->belongsTo(User::class, 'meet_user_id');
     }
 }
