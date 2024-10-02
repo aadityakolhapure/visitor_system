@@ -7,7 +7,7 @@
 
     <div class="py-12 sm:ml-64 mt-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <div class="bg-gray-100 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <div class="mb-4">
                     <form action="{{ route('visitor.graph') }}" method="GET" class="flex items-center">
                         <label for="year" class="mr-2">Select Year:</label>

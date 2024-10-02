@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
 use App\Models\Visitor;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -112,25 +114,51 @@ class AdminController extends Controller
         // Redirect to the visitors list with a success message
         return redirect()->route('admin.visitors1')->with('success', 'Visitor deleted successfully.');
     }
+    public function meetUser()
+    {
+        return $this->belongsTo(User::class, 'meet_user_id');
+    }
 
     // csv file download
     public function exportCSV()
     {
         $visitors = Visitor::all(); // Or apply any filters you want
 
-        $csvData = "Unique ID,Name,Phone,Check In,Check Out,Purpose,Meet\n";
+        // CSV Header
+        $csvData = "Unique ID,Name,Phone,Check In,Check Out,Purpose,Whom to Meet,Member1,Member2,Member3\n";
 
+        // CSV Data
         foreach ($visitors as $visitor) {
-            $csvData .= "{$visitor->unique_id},{$visitor->name},{$visitor->phone},{$visitor->check_in},{$visitor->check_out},{$visitor->purpose},{$visitor->meet}\n";
+            // Check if AdminMeetUser relationship exists and get the name, otherwise 'N/A'
+            $adminMeetUserName = $visitor->meetUser ? $visitor->meetUser->name : 'N/A';
+
+            // Concatenate visitor data for CSV row
+            $csvData .= "{$visitor->unique_id},{$visitor->name},{$visitor->phone},{$visitor->check_in},{$visitor->check_out},{$visitor->purpose},{$adminMeetUserName},{$visitor->member1},{$visitor->member2},{$visitor->member3}\n";
         }
 
+        // Create a file name with timestamp
         $fileName = 'visitors_' . now()->format('Y-m-d_H-i-s') . '.csv';
 
+        // Return CSV file as a response
         return Response::make($csvData, 200, [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=$fileName",
         ]);
     }
+
+//     public function bulkUpload(Request $request)
+//     {
+//         Excel::import(new UsersImport, request()->file('excel_file'));
+//         return redirect('/')->with('success', 'Users imported successfully!');
+//     }
+
+//     public function import() 
+// {
+//     Excel::import(new UsersImport, request()->file('your_excel_file'));
+    
+//     return redirect('/')->with('success', 'All good!');
+// }
+
 
     public function index1(Request $request)
     {
@@ -308,8 +336,8 @@ class AdminController extends Controller
 
             $totalVisitors = Visitor::count();
             $thisMonthVisitors = Visitor::whereYear('check_in', $now->year)
-                                        ->whereMonth('check_in', $now->month)
-                                        ->count();
+                ->whereMonth('check_in', $now->month)
+                ->count();
             $todayVisitors = Visitor::whereDate('check_in', $now->toDateString())->count();
 
             return response()->json([
@@ -354,6 +382,53 @@ class AdminController extends Controller
             ->pluck('year');
 
         return view('admin.chart', compact('labels', 'data', 'years', 'year'));
+    }
+
+    public function getMonthData($year, $month)
+    {
+        $days = Carbon::create($year, $month)->daysInMonth;
+        $visitorCounts = Visitor::select(
+            DB::raw('DATE(check_in) as date'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->whereYear('check_in', $year)
+            ->whereMonth('check_in', $month)
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->keyBy('date');
+
+        $labels = [];
+        $data = [];
+        for ($day = 1; $day <= $days; $day++) {
+            $date = Carbon::create($year, $month, $day)->format('Y-m-d');
+            $labels[] = $day;
+            $data[] = $visitorCounts[$date]->count ?? 0;
+        }
+
+        return response()->json(compact('labels', 'data'));
+    }
+
+    public function getDayData($year, $month, $day)
+    {
+        $visitorCounts = Visitor::select(
+            DB::raw('HOUR(check_in) as hour'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->whereDate('check_in', "$year-$month-$day")
+            ->groupBy('hour')
+            ->orderBy('hour')
+            ->get()
+            ->keyBy('hour');
+
+        $labels = [];
+        $data = [];
+        for ($hour = 0; $hour < 24; $hour++) {
+            $labels[] = sprintf("%02d:00", $hour);
+            $data[] = $visitorCounts[$hour]->count ?? 0;
+        }
+
+        return response()->json(compact('labels', 'data'));
     }
 
     public function getVisitors()

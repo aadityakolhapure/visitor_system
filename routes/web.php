@@ -5,6 +5,7 @@ use App\Http\Livewire\VisitorTable;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\admincontroller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitorController;
 use App\Models\department;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -88,5 +89,10 @@ Route::get('/admin/visitor-graph', [admincontroller::class, 'visitorGraph'])->na
 Route::get('/admin/quick-stats', [AdminController::class, 'getQuickStats'])->name('admin.quick-stats');
 Route::get('/api/users-by-department/{department}', [VisitorController::class, 'getUsersByDepartment']);
 Route::get('/api/users-by-department/{departmentId?}', [VisitorController::class, 'getUsersByDepartment']);
+Route::get('/admin/visitor-graph/{year}/{month}', [AdminController::class, 'getMonthData']);
+Route::get('/admin/visitor-graph/{year}/{month}/{day}', [AdminController::class, 'getDayData']);
+Route::post('/admin/users/bulk-upload', [admincontroller::class, 'bulkUpload'])->name('users.bulk-upload');
+Route::get('/admin/import', [UserController::class, 'importForm'])->name('import.form');
+Route::post('/admin/import', [UserController::class, 'import'])->name('import');
 
 require __DIR__.'/auth.php';

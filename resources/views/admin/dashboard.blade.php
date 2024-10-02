@@ -129,22 +129,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($visitors as $visitor)
-                                        <tr class="bg-white border-b hover:bg-green-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-green-900">
-                                            <td class="px-6 py-4">{{ $visitor->unique_id }}</td>
-                                            <td class="px-6 py-4">{{ $visitor->name }}</td>
-                                            <td class="px-6 py-4">{{ $visitor->phone ?? 'N/A' }}</td>
-                                            <td class="px-6 py-4">{{ $visitor->check_in }}</td>
-                                            <td class="px-6 py-4">{{ $visitor->check_out ?? 'Not checked out' }}</td>
-                                            <td class="px-6 py-4">
-                                                <button onclick="openVisitorDetails('{{ $visitor->unique_id }}', '{{ $visitor->name }}', '{{ $visitor->phone }}', '{{ $visitor->check_in }}', '{{ $visitor->check_out }}', '{{ $visitor->purpose }}', '{{ $visitor->meet }}', '{{ asset('storage/' . $visitor->photo) }}')"
-                                                    class="bg-green-600 hover:bg-green-500 text-white p-2 rounded-lg transition duration-300 ease-in-out">
-                                                    Details
-                                                </button>
-                                            </td>
-                                        </tr>
+                                    @foreach ($visitors as $index => $visitor)
+                                        @if ($index < 5) <!-- Limit the number of visitors displayed to 5 -->
+                                            <tr class="bg-white border-b hover:bg-green-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-green-900">
+                                                <td class="px-6 py-4">{{ $visitor->unique_id }}</td>
+                                                <td class="px-6 py-4">{{ $visitor->name }}</td>
+                                                <td class="px-6 py-4">{{ $visitor->phone ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4">{{ $visitor->check_in }}</td>
+                                                <td class="px-6 py-4">{{ $visitor->check_out ?? 'Not checked out' }}</td>
+                                                <td class="px-6 py-4">
+                                                    <button 
+                                                        onclick="openVisitorDetails('{{ $visitor->unique_id }}', '{{ $visitor->name }}', '{{ $visitor->phone }}', '{{ $visitor->check_in }}', '{{ $visitor->check_out }}', '{{ $visitor->purpose }}', '{{ $visitor->meetUser ? $visitor->meetUser->name : 'N/A' }}', '{{ asset('storage/' . $visitor->photo) }}')"
+                                                        class="bg-green-600 hover:bg-green-500 text-white p-2 rounded-lg transition duration-300 ease-in-out">
+                                                        Details
+                                                    </button>
+                                                </td>
+                                            
+
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -288,7 +294,7 @@
 
     
     <script>
-        function openVisitorDetails(uniqueId, name, phone, checkIn, checkOut, purpose, meet, photoUrl) {
+        function openVisitorDetails(uniqueId, name, phone, checkIn, checkOut, purpose, AdminMeetUser, photoUrl) {
             // Set the visitor details in the modal
             document.getElementById('visitorId').textContent = uniqueId;
             document.getElementById('visitorName').textContent = name;
@@ -296,7 +302,7 @@
             document.getElementById('visitorCheckIn').textContent = checkIn || 'Not available';
             document.getElementById('visitorCheckOut').textContent = checkOut || 'Not checked out';
             document.getElementById('visitorPurpose').textContent = purpose || 'N/A';
-            document.getElementById('visitorMeet').textContent = meet || 'N/A';
+            document.getElementById('visitorMeet').textContent = AdminMeetUser || 'N/A';
 
             // Set the visitor image in the modal
             document.getElementById('visitorImage').src = photoUrl;
