@@ -3,6 +3,7 @@
         {{-- <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Add New User') }}
         </h2> --}}
+        @section('title', 'Add New User')
     </x-slot>
 
     <div class="container mx-auto sm:ml-64 p-6 mt-16">

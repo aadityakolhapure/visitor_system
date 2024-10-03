@@ -4,7 +4,7 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot> --}}
-
+    @section('title', 'Admin Dashboard')
     <div class="py-12">
 
 
@@ -139,7 +139,7 @@
                                                 <td class="px-6 py-4">{{ $visitor->check_out ?? 'Not checked out' }}</td>
                                                 <td class="px-6 py-4">
                                                     <button 
-                                                        onclick="openVisitorDetails('{{ $visitor->unique_id }}', '{{ $visitor->name }}', '{{ $visitor->phone }}', '{{ $visitor->check_in }}', '{{ $visitor->check_out }}', '{{ $visitor->purpose }}', '{{ $visitor->meetUser ? $visitor->meetUser->name : 'N/A' }}', '{{ asset('storage/' . $visitor->photo) }}')"
+                                                        onclick="openVisitorDetails('{{ $visitor->unique_id }}', '{{ $visitor->name }}', '{{ $visitor->phone }}','{{$visitor->member_count}}', '{{ $visitor->check_in }}', '{{ $visitor->check_out }}', '{{ $visitor->purpose }}', '{{ $visitor->meetUser ? $visitor->meetUser->name : 'N/A' }}', '{{ asset('storage/' . $visitor->photo) }}')"
                                                         class="bg-green-600 hover:bg-green-500 text-white p-2 rounded-lg transition duration-300 ease-in-out">
                                                         Details
                                                     </button>
@@ -204,6 +204,7 @@
                         <strong>Name:</strong> <span id="visitorName"></span><br>
 
                         <strong>Phone:</strong> <span id="visitorPhone"></span><br>
+                        <strong>Members Count:</strong> <span id="memberCount"></span><br>
                         <strong>Check In:</strong> <span id="visitorCheckIn"></span><br>
                         <strong>Check Out:</strong> <span id="visitorCheckOut"></span><br>
                         <strong>Purpose:</strong> <span id="visitorPurpose"></span><br>
@@ -294,11 +295,12 @@
 
     
     <script>
-        function openVisitorDetails(uniqueId, name, phone, checkIn, checkOut, purpose, AdminMeetUser, photoUrl) {
+        function openVisitorDetails(uniqueId, name, phone,member_count, checkIn, checkOut, purpose, AdminMeetUser, photoUrl) {
             // Set the visitor details in the modal
             document.getElementById('visitorId').textContent = uniqueId;
             document.getElementById('visitorName').textContent = name;
             document.getElementById('visitorPhone').textContent = phone || 'N/A';
+            document.getElementById('memberCount').textContent = member_count || 'N/A';
             document.getElementById('visitorCheckIn').textContent = checkIn || 'Not available';
             document.getElementById('visitorCheckOut').textContent = checkOut || 'Not checked out';
             document.getElementById('visitorPurpose').textContent = purpose || 'N/A';

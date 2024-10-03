@@ -14,16 +14,21 @@
         <!-- Page Title and Actions -->
         <div class="flex justify-between items-center mb-8 mt-8 p-4 bg-white shadow-md rounded-lg">
             <h2 class="text-2xl font-bold text-green-700">Visitor List</h2>
-            
+
             <!-- Download CSV Button -->
             <a href="{{ route('admin.visitors.export') }}" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
                 Download CSV
             </a>
         </div>
 
+        <!-- Search Bar -->
+        <div class="mb-4">
+            <input type="text" id="searchInput" placeholder="Search visitors..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+
         <!-- Visitor Table -->
         <div class="overflow-x-auto bg-white rounded-lg shadow-lg">
-            <table class="min-w-full table-auto leading-normal text-left">
+            <table id="visitorTable" class="min-w-full table-auto leading-normal text-left">
                 <thead>
                     <tr class="bg-green-100 text-green-900">
                         <th class="py-2 px-4 font-semibold">Unique ID</th>
@@ -44,8 +49,8 @@
                             <td class="px-4 py-2">{{ $visitor->check_out ?? 'Not checked out' }}</td>
                             <td class="px-4 py-2 flex space-x-2">
                                 <!-- Details Button -->
-                                <a href="{{ route('admin.visitor.show', $visitor->unique_id) }}" 
-                                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
+                                <a href="{{ route('admin.visitor.show', $visitor->unique_id) }}"
+                                    class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
                                     Details
                                 </a>
                             </td>
@@ -62,7 +67,32 @@
     </div>
 
     <script>
-        // Modal handling or any additional JavaScript functionality
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const table = document.getElementById('visitorTable');
+            const rows = table.getElementsByTagName('tr');
+
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+
+                for (let i = 1; i < rows.length; i++) {
+                    let found = false;
+                    const cells = rows[i].getElementsByTagName('td');
+
+                    for (let j = 0; j < cells.length; j++) {
+                        const cellText = cells[j].textContent.toLowerCase();
+
+                        if (cellText.includes(searchTerm)) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    rows[i].style.display = found ? '' : 'none';
+                }
+            });
+        });
     </script>
 </x-app-layout>
 

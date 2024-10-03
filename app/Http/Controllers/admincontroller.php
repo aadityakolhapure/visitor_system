@@ -20,6 +20,9 @@ class AdminController extends Controller
     public function index()
     {
         return view('admin.dashboard');
+
+        // $visitors = Visitor::paginate(10); // Fetch only 10 entries per page
+        // return view('admin.visitors.index', compact('visitors'));
     }
 
     public function createDepartment()
@@ -146,18 +149,18 @@ class AdminController extends Controller
         ]);
     }
 
-//     public function bulkUpload(Request $request)
-//     {
-//         Excel::import(new UsersImport, request()->file('excel_file'));
-//         return redirect('/')->with('success', 'Users imported successfully!');
-//     }
+    //     public function bulkUpload(Request $request)
+    //     {
+    //         Excel::import(new UsersImport, request()->file('excel_file'));
+    //         return redirect('/')->with('success', 'Users imported successfully!');
+    //     }
 
-//     public function import() 
-// {
-//     Excel::import(new UsersImport, request()->file('your_excel_file'));
-    
-//     return redirect('/')->with('success', 'All good!');
-// }
+    //     public function import() 
+    // {
+    //     Excel::import(new UsersImport, request()->file('your_excel_file'));
+
+    //     return redirect('/')->with('success', 'All good!');
+    // }
 
 
     public function index1(Request $request)

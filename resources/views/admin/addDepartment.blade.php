@@ -2,7 +2,9 @@
     <x-slot name="header">
         {{-- <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
-        </h2> --}}
+        </h2>
+         --}}
+         @section('title', 'Departments')
     </x-slot>
 
     <div class="container sm:ml-64 p-6 mt-16">

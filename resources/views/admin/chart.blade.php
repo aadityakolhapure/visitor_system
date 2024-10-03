@@ -3,6 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Visitor Graph') }}
         </h2>
+        @section('title', 'Report')
     </x-slot>
 
     <div class="py-12 sm:ml-64 mt-12">

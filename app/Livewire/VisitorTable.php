@@ -1,23 +1,20 @@
 <?php
+
 namespace App\Http\Livewire;
 
-use App\Models\Visitor;
-
 use Livewire\Component;
+use Livewire\WithPagination;
+use App\Models\Visitor;
 
 class VisitorTable extends Component
 {
-    public $visitors;
-    public function index()
-    {
-        $visitors = Visitor::orderBy('check_in', 'desc')->get('4');
-        return view('dashboard', compact('visitors'));
-    }
+    use WithPagination;
 
     public function render()
     {
-        $this->visitors = Visitor::all(); // Assuming you have a Visitor model
+        // Fetch paginated visitors, 10 per page
+        $visitors = Visitor::paginate(10);
 
-        return view('livewire.visitor-table');
+        return view('livewire.visitor-table', ['visitors' => $visitors]);
     }
 }

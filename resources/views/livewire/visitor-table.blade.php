@@ -1,33 +1,37 @@
-<div class="flex items-center justify-center mb-4 rounded bg-gray-50 dark:bg-gray-800">
-    <div class="w-full p-4">
-        <h2 class="text-xl font-bold mb-4">Recent Visitors</h2>
-        <div class="w-full overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">ID</th>
-                        <th scope="col" class="px-6 py-3">Name</th>
-                        <th scope="col" class="px-6 py-3">Phone</th>
-                        <th scope="col" class="px-6 py-3">Purpose</th>
-                        <th scope="col" class="px-6 py-3">Meet</th>
-                        <th scope="col" class="px-6 py-3">Check In</th>
-                        <th scope="col" class="px-6 py-3">Check Out</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($visitors as $visitor)
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-6 py-4">{{ $visitor->unique_id }}</td>
-                            <td class="px-6 py-4">{{ $visitor->name }}</td>
-                            <td class="px-6 py-4">{{ $visitor->phone ?? 'N/A' }}</td>
-                            <td class="px-6 py-4">{{ $visitor->purpose }}</td>
-                            <td class="px-6 py-4">{{ $visitor->meet }}</td>
-                            <td class="px-6 py-4">{{ $visitor->check_in }}</td>
-                            <td class="px-6 py-4">{{ $visitor->check_out ?? 'Not checked out' }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+<div class="overflow-x-auto bg-white rounded-lg shadow-lg">
+    <table class="min-w-full table-auto leading-normal text-left">
+        <thead>
+            <tr class="bg-green-100 text-green-900">
+                <th class="py-2 px-4 font-semibold">Unique ID</th>
+                <th class="py-2 px-4 font-semibold">Name</th>
+                <th class="py-2 px-4 font-semibold">Phone</th>
+                <th class="py-2 px-4 font-semibold">Check In</th>
+                <th class="py-2 px-4 font-semibold">Check Out</th>
+                <th class="py-2 px-4 font-semibold">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($visitors as $visitor)
+                <tr class="border-b border-gray-200 hover:bg-green-50 transition duration-200">
+                    <td class="px-4 py-2">{{ $visitor->unique_id }}</td>
+                    <td class="px-4 py-2">{{ $visitor->name }}</td>
+                    <td class="px-4 py-2">{{ $visitor->phone ?? 'N/A' }}</td>
+                    <td class="px-4 py-2">{{ $visitor->check_in }}</td>
+                    <td class="px-4 py-2">{{ $visitor->check_out ?? 'Not checked out' }}</td>
+                    <td class="px-4 py-2 flex space-x-2">
+                        <!-- Details Button -->
+                        <a href="{{ route('admin.visitor.show', $visitor->unique_id) }}" 
+                            class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Pagination Links -->
+    <div class="py-3 px-4">
+        {{ $visitors->links() }}
     </div>
 </div>
