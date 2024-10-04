@@ -27,14 +27,14 @@ Route::post('/visitor/preview', [VisitorController::class, 'previewById'])->name
 Route::get('/dashboard/visitors/export', [VisitorController::class, 'exportCSV'])->name('visitors.export');
 Route::get('/dashboard/visitor-graph', [VisitorController::class, 'visitorGraph'])->name('visitor.graph');
 
+Route::get('/visitors', [VisitorController::class, 'index'])->middleware('auth')->name('visitors');
 
 
-
-Route::get('/dashboard/visitors', [VisitorController::class, 'index'])->name('visitors');
+// Route::get('/dashboard/visitors', [VisitorController::class, 'index'])->name('visitors');
 Route::delete('/visitors/{id}', [VisitorController::class, 'destroy'])->name('visitor.destroy');
 Route::delete('/dashboard', [VisitorController::class, 'homePage'])->name('home');
 
-
+Route::get('/visitors', [VisitorController::class, 'index'])->name('visitors.index');
 
 
 Route::get('/dashboard', function () {
@@ -45,7 +45,7 @@ Route::get('/dashboard', function () {
 // routes/web.php
 Route::get('/dashboard/visitors', [VisitorController::class, 'showVisitors'])->name('visitors');
 // routes/web.php
-Route::get('/dashboard/visitor/{unique_id}', [VisitorController::class, 'show'])->name('visitor.show');
+Route::get('/dashboard/visitor/{unique_id}', [VisitorController::class, 'show'])->middleware('auth')->name('visitor.show');
 Route::post('/dashboard/visitors/{id}/checkout', [VisitorController::class, 'checkout1'])->name('visitor.checkout1');
 Route::post('/dashboard', [VisitorController::class, 'home'])->name('dash');
 

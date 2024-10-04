@@ -112,7 +112,7 @@
 <body>
     <div class="id-card flex items-center">
         <div class="header">
-            <img src="{{ asset('images/login_logo.png') }}" alt="Dnyanshree Institute" style="max-height: 50px;">
+            <img src="{{ asset('images/ldeskapp-logo-svg.png') }}" alt="Dnyanshree Institute" style="max-height: 50px;">
         </div>
         <div class="flex justify-center items-center ml-20" id="id-image">
             <img src="{{ public_path('storage/' . $visitor->photo) }}" alt="{{ $visitor->name }}" class="photo">

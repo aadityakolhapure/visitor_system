@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -286,21 +287,20 @@ class VisitorController extends Controller
 
     public function index(Request $request)
     {
-        // Define the allowed filter keys
         $allowedFilters = ['search', 'date', 'month', 'year'];
-
-        // Initialize $filters with default empty values
         $filters = array_fill_keys($allowedFilters, '');
-
-        // Update $filters with actual request inputs
+    
         foreach ($allowedFilters as $filter) {
             if ($request->has($filter)) {
                 $filters[$filter] = $request->input($filter);
             }
         }
-
+    
         $query = Visitor::query();
-
+    
+        // Filter visitors by the logged-in user's ID
+        $query->where('meet_user_id', auth()->id());
+    
         // Apply search filter
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
@@ -308,30 +308,27 @@ class VisitorController extends Controller
                     ->orWhere('unique_id', 'like', "%{$filters['search']}%");
             });
         }
-
+    
         // Apply date filter
         if (!empty($filters['date'])) {
             $query->whereDate('check_in', $filters['date']);
         }
-
+    
         // Apply month filter
         if (!empty($filters['month'])) {
             $date = Carbon::createFromFormat('Y-m', $filters['month']);
             $query->whereYear('check_in', $date->year)
                 ->whereMonth('check_in', $date->month);
         }
-
+    
         // Apply year filter
         if (!empty($filters['year'])) {
             $query->whereYear('check_in', $filters['year']);
         }
-
+    
         $visitors = $query->orderBy('check_in', 'desc')->paginate(10);
-
-        // Append query string to pagination links
         $visitors->appends($filters);
-
-        // Always pass $filters to the view
+    
         return view('visitors_table', compact('visitors', 'filters'));
     }
 
