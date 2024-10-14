@@ -4,7 +4,7 @@
     </x-slot>
 
     <!-- Container for Visitor Details -->
-    <div class="container sm:ml-64 p-6 mt-16">
+    <div class="sm:ml-64 p-6 mt-16">
         <div class="mx-auto space-y-6">
             <!-- Page Title -->
             <div class="flex justify-between items-center mb-6">

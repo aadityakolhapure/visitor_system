@@ -3,7 +3,7 @@
         {{-- Removed header text for a cleaner look --}}
     </x-slot>
 
-    <div class="container mx-auto sm:ml-64 p-6 mt-16">
+    <div class=" mx-auto sm:ml-64 p-6 mt-16">
         <!-- Success Message -->
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 p-4 rounded-lg mb-4">

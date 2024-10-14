@@ -35,6 +35,12 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $user->department->name ?? 'N/A' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('admin.users.edit', $user) }}" class="text-gray-100 mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Edit</a>
+
+                                        {{-- <form action="{{ route('users.delete', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach

@@ -7,7 +7,7 @@
          @section('title', 'Departments')
     </x-slot>
 
-    <div class="container sm:ml-64 p-6 mt-16">
+    <div class=" sm:ml-64 p-6 mt-16">
         <div class="container mx-auto m-6">
             <!-- Container for Adding Department Form -->
             <div class="max-w-4xl mx-auto mb-8">

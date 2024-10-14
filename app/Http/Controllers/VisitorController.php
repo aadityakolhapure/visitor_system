@@ -158,13 +158,15 @@ class VisitorController extends Controller
 
     // app/Http/Controllers/VisitorController.php
     public function showVisitors()
-    {
-        // Fetch and paginate visitors
-        $visitors = Visitor::orderBy('check_in', 'desc')->paginate();
+{
+    // Fetch and paginate visitors
+    $visitors = Visitor::orderBy('check_in', 'desc')
+        ->where('meet_user_id', auth()->id())
+        ->paginate(10); // Adjust the number as needed
 
-        // Return the visitors_table view with paginated visitors
-        return view('visitor_table', compact('visitors'));
-    }
+    // Return the visitors_table view with paginated visitors
+    return view('visitor_table', compact('visitors'));
+}
 
     public function show($unique_id)
     {
@@ -177,16 +179,24 @@ class VisitorController extends Controller
 
     public function exportCSV()
     {
-        $visitors = Visitor::all(); // Or apply any filters you want
+        $visitors = Visitor::where('meet_user_id', auth()->id())->get(); // Or apply any filters you want
 
-        $csvData = "Unique ID,Name,Phone,Check In,Check Out,Purpose,Meet\n";
+        // CSV Header
+        $csvData = "Unique ID,Name,Phone,Check In,Check Out,Purpose,Whom to Meet,Member1,Member2,Member3\n";
 
+        // CSV Data
         foreach ($visitors as $visitor) {
-            $csvData .= "{$visitor->unique_id},{$visitor->name},{$visitor->phone},{$visitor->check_in},{$visitor->check_out},{$visitor->purpose},{$visitor->meet}\n";
+            // Check if AdminMeetUser relationship exists and get the name, otherwise 'N/A'
+            $adminMeetUserName = $visitor->meetUser ? $visitor->meetUser->name : 'N/A';
+
+            // Concatenate visitor data for CSV row
+            $csvData .= "{$visitor->unique_id},{$visitor->name},{$visitor->phone},{$visitor->check_in},{$visitor->check_out},{$visitor->purpose},{$adminMeetUserName},{$visitor->member1},{$visitor->member2},{$visitor->member3}\n";
         }
 
+        // Create a file name with timestamp
         $fileName = 'visitors_' . now()->format('Y-m-d_H-i-s') . '.csv';
 
+        // Return CSV file as a response
         return Response::make($csvData, 200, [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=$fileName",
@@ -289,18 +299,18 @@ class VisitorController extends Controller
     {
         $allowedFilters = ['search', 'date', 'month', 'year'];
         $filters = array_fill_keys($allowedFilters, '');
-    
+
         foreach ($allowedFilters as $filter) {
             if ($request->has($filter)) {
                 $filters[$filter] = $request->input($filter);
             }
         }
-    
+
         $query = Visitor::query();
-    
+
         // Filter visitors by the logged-in user's ID
         $query->where('meet_user_id', auth()->id());
-    
+
         // Apply search filter
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
@@ -308,27 +318,27 @@ class VisitorController extends Controller
                     ->orWhere('unique_id', 'like', "%{$filters['search']}%");
             });
         }
-    
+
         // Apply date filter
         if (!empty($filters['date'])) {
             $query->whereDate('check_in', $filters['date']);
         }
-    
+
         // Apply month filter
         if (!empty($filters['month'])) {
             $date = Carbon::createFromFormat('Y-m', $filters['month']);
             $query->whereYear('check_in', $date->year)
                 ->whereMonth('check_in', $date->month);
         }
-    
+
         // Apply year filter
         if (!empty($filters['year'])) {
             $query->whereYear('check_in', $filters['year']);
         }
-    
+
         $visitors = $query->orderBy('check_in', 'desc')->paginate(10);
         $visitors->appends($filters);
-    
+
         return view('visitors_table', compact('visitors', 'filters'));
     }
 
@@ -349,15 +359,51 @@ class VisitorController extends Controller
     }
 
 
+    // public function visitorGraph(Request $request)
+    // {
+    //     $year = $request->input('year', Carbon::now()->year);
+
+    //     // Get visitor counts for the selected year
+    //     $visitorCounts = Visitor::select(
+    //         DB::raw('DATE_FORMAT(check_in, "%Y-%m") as month'),
+    //         DB::raw('COUNT(*) as count')
+    //     )
+    //         ->whereYear('check_in', $year)
+    //         ->groupBy('month')
+    //         ->orderBy('month')
+    //         ->get();
+
+    //     // Prepare data for the chart
+    //     $labels = [];
+    //     $data = [];
+    //     $startDate = Carbon::create($year, 1, 1);
+
+    //     for ($month = 1; $month <= 12; $month++) {
+    //         $monthKey = $startDate->copy()->month($month)->format('Y-m');
+    //         $count = $visitorCounts->where('month', $monthKey)->first()->count ?? 0;
+
+    //         $labels[] = $startDate->copy()->month($month)->format('M');
+    //         $data[] = $count;
+    //     }
+
+    //     // Get list of years for the dropdown
+    //     $years = Visitor::selectRaw('YEAR(check_in) as year')
+    //         ->distinct()
+    //         ->orderBy('year', 'desc')
+    //         ->pluck('year');
+
+    //     return view('visitor_graph', compact('labels', 'data', 'years', 'year'));
+    // }
+
     public function visitorGraph(Request $request)
     {
         $year = $request->input('year', Carbon::now()->year);
-
         // Get visitor counts for the selected year
         $visitorCounts = Visitor::select(
             DB::raw('DATE_FORMAT(check_in, "%Y-%m") as month'),
             DB::raw('COUNT(*) as count')
         )
+            ->where('meet_user_id', auth()->id())
             ->whereYear('check_in', $year)
             ->groupBy('month')
             ->orderBy('month')
@@ -367,11 +413,9 @@ class VisitorController extends Controller
         $labels = [];
         $data = [];
         $startDate = Carbon::create($year, 1, 1);
-
         for ($month = 1; $month <= 12; $month++) {
             $monthKey = $startDate->copy()->month($month)->format('Y-m');
             $count = $visitorCounts->where('month', $monthKey)->first()->count ?? 0;
-
             $labels[] = $startDate->copy()->month($month)->format('M');
             $data[] = $count;
         }
@@ -383,5 +427,64 @@ class VisitorController extends Controller
             ->pluck('year');
 
         return view('visitor_graph', compact('labels', 'data', 'years', 'year'));
+    }
+
+    public function getMonthData($year, $month)
+    {
+        $days = Carbon::create($year, $month)->daysInMonth;
+        $visitorCounts = Visitor::select(
+            DB::raw('DATE(check_in) as date'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->where('meet_user_id', auth()->id())  // Added this line
+            ->whereYear('check_in', $year)
+            ->whereMonth('check_in', $month)
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->keyBy('date');
+
+        $labels = [];
+        $data = [];
+        for ($day = 1; $day <= $days; $day++) {
+            $date = Carbon::create($year, $month, $day)->format('Y-m-d');
+            $labels[] = $day;
+            $data[] = $visitorCounts[$date]->count ?? 0;
+        }
+
+        return response()->json(compact('labels', 'data'));
+    }
+
+    public function getDayData($year, $month, $day)
+    {
+        $visitorCounts = Visitor::select(
+            DB::raw('HOUR(check_in) as hour'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->where('meet_user_id', auth()->id())  // Added this line
+            ->whereDate('check_in', "$year-$month-$day")
+            ->groupBy('hour')
+            ->orderBy('hour')
+            ->get()
+            ->keyBy('hour');
+
+        $labels = [];
+        $data = [];
+        for ($hour = 0; $hour < 24; $hour++) {
+            $labels[] = sprintf("%02d:00", $hour);
+            $data[] = $visitorCounts[$hour]->count ?? 0;
+        }
+
+        return response()->json(compact('labels', 'data'));
+    }
+
+    public function getVisitors()
+    {
+        $visitors = Visitor::orderBy('check_in', 'desc')
+            ->where('meet_user_id', auth()->id())
+            ->take(100)  // Limit to the last 100 visitors for performance
+            ->get(['unique_id', 'name', 'phone', 'check_in', 'check_out', 'purpose', 'meet', 'photo']);
+
+        return response()->json($visitors);
     }
 }

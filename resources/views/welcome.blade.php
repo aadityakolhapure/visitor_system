@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
 
-    <title>Laravel Visitor Management</title>
+    <title>@yield('title', 'Visitor Management')</title>
+    <link rel="icon" href="{{ asset('images/deskapp-logo-svg.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Fonts -->

@@ -6,7 +6,7 @@
         @section('title', 'Add New User')
     </x-slot>
 
-    <div class="container mx-auto sm:ml-64 p-6 mt-16">
+    <div class="mx-auto sm:ml-64 p-6 mt-16">
         {{-- Success message --}}
         @if (session('success'))
             <div class="bg-green-200 text-white p-4 rounded-lg mb-4">

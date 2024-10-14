@@ -263,6 +263,12 @@ class AdminController extends Controller
         return view('admin.user_show', compact('users'));
     }
 
+    public function deleteUser(User $user)
+    {
+        $user->delete();
+        return redirect()->route('users.show')->with('success', 'User deleted successfully.');
+    }
+
     public function showvisitorslist(Request $request)
     {
         $query = Visitor::query();

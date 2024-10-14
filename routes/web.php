@@ -38,7 +38,7 @@ Route::get('/visitors', [VisitorController::class, 'index'])->name('visitors.ind
 
 
 Route::get('/dashboard', function () {
-    $visitors = Visitor::orderBy('check_in', 'desc')->take(5)->get();
+    $visitors = Visitor::orderBy('check_in', 'desc')->where('meet_user_id', auth()->id())->take(5)->get();
     return view('dashboard', compact('visitors'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -80,6 +80,7 @@ Route::get('/admin/visitors/export', [admincontroller::class, 'exportCSV'])->nam
 // Route::post('/users', [admincontroller::class, 'store1'])->name('users.store');
 Route::get('/admin/users/create', [AdminController::class, 'create'])->name('users.create');
 Route::post('/admin/users', [AdminController::class, 'store1'])->name('users.store');
+Route::delete('/admin/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
 Route::get('/admin/users', [AdminController::class, 'showUsers'])->name('admin.users');
 Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
 Route::put('/admin/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');

@@ -39,10 +39,10 @@
 
         .header {
             background-color: #003366;
-            color: white;
+            /* color: white;
             /* padding: 5px; */
             text-align: center;
-            font-size: 16px;
+            font-size: 16px; */
             font-weight: bold;
             width: 100%;
             margin-bottom: 10px;
@@ -112,7 +112,8 @@
 <body>
     <div class="id-card flex items-center">
         <div class="header">
-            <img src="{{ asset('images/ldeskapp-logo-svg.png') }}" alt="Dnyanshree Institute" style="max-height: 50px;">
+            <img src="{{ asset('images/login_logo.png') }}" class="h-10 " alt="Flowbite Logo"
+            style="height: 60px; width: 320px">
         </div>
         <div class="flex justify-center items-center ml-20" id="id-image">
             <img src="{{ public_path('storage/' . $visitor->photo) }}" alt="{{ $visitor->name }}" class="photo">

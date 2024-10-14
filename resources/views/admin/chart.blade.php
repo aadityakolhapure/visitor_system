@@ -216,13 +216,22 @@
             if (currentMonth) {
                 const backButton = document.createElement('button');
                 backButton.textContent = 'Back to Year View';
+                backButton.style.color = 'green'; 
+                backButton.style.backgroundColor = '#d7ee5'; 
+                backButton.style.padding = '10px'; 
+                backButton.style.marginleft = '10px'; 
                 backButton.onclick = () => createYearChart(yearLabels, yearData, currentYear);
                 navContainer.appendChild(backButton);
             }
 
             if (currentDay) {
                 const backButton = document.createElement('button');
-                backButton.textContent = '| Back to Month View (Year: ' + currentYear + ')';
+                backButton.textContent = 'Back to Month View (Year: ' + currentYear + ')';
+                backButton.style.color = 'green'; 
+                backButton.style.backgroundColor = '#d5eed5'; 
+                backButton.style.padding = '10px'; 
+                backButton.style.marginleft = '10px'; 
+
                 backButton.onclick = () => fetchMonthData(currentYear, currentMonth);
                 navContainer.appendChild(backButton);
             }
