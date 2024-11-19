@@ -14,12 +14,23 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Cache;
+use App\Notifications\UserRejectedNotification;
+use App\Notifications\UserApprovedNotification;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        // return view('admin.dashboard');
+
+        // Get the latest 5 visitors for the authenticated user
+        $visitors = Visitor::with('meetUser')
+            ->where('meet_user_id', auth()->id())
+            ->orderBy('check_in', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('admin.dashboard', compact('visitors'));
 
         // $visitors = Visitor::paginate(10); // Fetch only 10 entries per page
         // return view('admin.visitors.index', compact('visitors'));
@@ -155,7 +166,7 @@ class AdminController extends Controller
     //         return redirect('/')->with('success', 'Users imported successfully!');
     //     }
 
-    //     public function import() 
+    //     public function import()
     // {
     //     Excel::import(new UsersImport, request()->file('your_excel_file'));
 
@@ -448,4 +459,32 @@ class AdminController extends Controller
 
         return response()->json($visitors);
     }
+
+    public function showPendingUsers()
+    {
+        $pendingUsers = User::where('status', 'pending')->get();
+        return view('admin.pending-users', compact('pendingUsers'));
+    }
+
+    public function approveUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['status' => 'approved']);
+
+        // Send notification
+        $user->notify(new UserApprovedNotification());
+
+        return redirect()->back()->with('message', 'User approved successfully and notified.');
+    }
+
+    public function rejectUser($id)
+{
+    $user = User::findOrFail($id);
+    $user->update(['status' => 'rejected']);
+
+    // Send notification
+    $user->notify(new UserRejectedNotification());
+
+    return redirect()->back()->with('message', 'User rejected successfully and notified.');
+}
 }

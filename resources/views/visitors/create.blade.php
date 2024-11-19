@@ -227,16 +227,83 @@
         const visitorForm = document.getElementById('visitorForm');
         const errorAlert = document.getElementById('error-alert');
 
-        // Access the user's camera
-        navigator.mediaDevices.getUserMedia({
-                video: true
-            })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => {
-                console.error("Error accessing the camera: ", err);
-            });
+        // Add constraints for better camera compatibility
+        const constraints = {
+            video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: "user"
+            }
+        };
+
+        async function initCamera() {
+            try {
+                // First try with the ideal constraints
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                handleSuccess(stream);
+            } catch (err) {
+                console.error("First attempt failed:", err);
+                
+                // If first attempt fails, try with basic constraints
+                try {
+                    const basicStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    handleSuccess(basicStream);
+                } catch (fallbackErr) {
+                    console.error("Fallback attempt failed:", fallbackErr);
+                    handleError(fallbackErr);
+                }
+            }
+        }
+
+        function handleSuccess(stream) {
+            video.srcObject = stream;
+            video.play().catch(e => console.error("Error playing video:", e));
+            captureButton.disabled = false;
+            errorAlert.classList.add('hidden');
+        }
+
+        function handleError(err) {
+            let errorMessage = "Camera access failed: ";
+            
+            switch(err.name) {
+                case 'NotReadableError':
+                    errorMessage += "The camera is in use by another application or encountered a hardware error. Please: \n" +
+                                  "1. Close other apps using the camera\n" +
+                                  "2. Restart your browser\n" +
+                                  "3. Check if your camera is working in other applications";
+                    break;
+                case 'NotAllowedError':
+                    errorMessage += "Camera permission was denied. Please allow camera access and refresh the page.";
+                    break;
+                case 'NotFoundError':
+                    errorMessage += "No camera was found on your device.";
+                    break;
+                default:
+                    errorMessage += err.message;
+            }
+            
+            errorAlert.textContent = errorMessage;
+            errorAlert.classList.remove('hidden');
+            captureButton.disabled = true;
+        }
+
+        // Check if getUserMedia is supported and initialize
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Ensure any existing streams are stopped before initializing
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+            initCamera();
+        } else {
+            handleError({ name: 'NotSupportedError', message: "Your browser doesn't support camera access" });
+        }
+
+        // Add cleanup when page is unloaded
+        window.addEventListener('beforeunload', () => {
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+        });
 
         // Capture photo
         captureButton.addEventListener('click', () => {

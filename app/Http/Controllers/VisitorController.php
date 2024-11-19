@@ -16,6 +16,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use App\Mail\VisitorArrival;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\NewVisitorNotification;
 
 class VisitorController extends Controller
 {
@@ -71,6 +74,17 @@ class VisitorController extends Controller
             'purpose' => $validated['purpose'],
             'photo' => 'visitor_photos/' . $filename,
         ]);
+
+        if ($visitor->meet_user_id) {
+            $userToMeet = User::find($visitor->meet_user_id);
+
+            Mail::to($userToMeet->email)->send(new VisitorArrival($visitor));
+        }
+
+        // Send notification to the user being met
+        if ($visitor->meetUser) {
+            $visitor->meetUser->notify(new NewVisitorNotification($visitor));
+        }
 
         return redirect()->route('visitor.preview', $visitor->id);
     }

@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Visitor extends Model
 {
     use HasFactory;
+    use Notifiable;
 
     protected $fillable = [
         'unique_id',
@@ -33,7 +35,7 @@ class Visitor extends Model
     {
         return $this->belongsTo(Department::class);
     }
-    
+
     public function meetUser()
     {
         return $this->belongsTo(User::class, 'meet_user_id');

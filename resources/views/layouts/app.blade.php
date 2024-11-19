@@ -5,8 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>@yield('title', 'Visitor Management')</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- <meta http-equiv="Permissions-Policy" content="camera=()">
+    <title>@yield('title', 'Visitor Management')</title> --}}
     <link rel="icon" href="{{ asset('images/deskapp-logo-svg.png') }}">
     {{-- @vite(['resources/css/app.css','resources/js/app.js']) --}}
 

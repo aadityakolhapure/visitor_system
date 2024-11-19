@@ -24,7 +24,7 @@
             width: 3.125in;
             /* Adjusted to make it vertical */
             height: 4.375in;
-            background-color: white;
+            background-color: rgb(255, 255, 255);
             border: 1px solid #ccc;
             border-radius: 10px;
             overflow: hidden;
@@ -38,7 +38,7 @@
         }
 
         .header {
-            background-color: #003366;
+            background-color: #ffffff;
             /* color: white;
             /* padding: 5px; */
             text-align: center;
@@ -112,7 +112,7 @@
 <body>
     <div class="id-card flex items-center">
         <div class="header">
-            <img src="{{ asset('images/login_logo.png') }}" class="h-10 " alt="Flowbite Logo"
+            <img src="{{ public_path('images/login_logo.png') }}" class="h-10 " alt="Flowbite Logo"
             style="height: 60px; width: 320px">
         </div>
         <div class="flex justify-center items-center ml-20" id="id-image">

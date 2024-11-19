@@ -14,11 +14,9 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <a href="" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="{{ asset('images/login_logo.png') }}" class="h-10 " alt="Flowbite Logo" style="height: 80px; width: 400px">
-            </a>
-        </div>
+    @php
+    dd(public_path('images/login_logo.png'));
+@endphp
         <div class="details">
             <img src="{{ public_path('storage/' . $visitor->photo) }}" alt="{{ $visitor->name }}" class="photo ">
             <p><strong>Name:</strong> {{ $visitor->name }}</p>
