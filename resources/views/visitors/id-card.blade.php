@@ -13,7 +13,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -40,13 +40,20 @@
         .header {
             background-color: #ffffff;
             /* color: white;
-            /* padding: 5px; */
+
             text-align: center;
             font-size: 16px; */
+            /* padding: 5px; */
             font-weight: bold;
             width: 100%;
             margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
         }
+
+        /* .header img {
+            width: 100px;
+            height: 100px;
+        } */
 
         .photo {
             width: 100px;
