@@ -34,9 +34,3 @@ The system also features **email notifications** and **user verification** to en
 - ✅ MySQL
 - ✅ Node.js and npm
 - ✅ Laravel 11
-
-### Steps
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/visitor-management-system.git
-   cd visitor-management-system
