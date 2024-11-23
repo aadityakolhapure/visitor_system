@@ -12,6 +12,10 @@ export default {
         "./resources/**/*.vue",
         "./node_modules/flowbite/**/*.js"
     ],
+    darkMode: 'class', // Enable class-based dark mode
+    theme: {
+      extend: {},
+    },
 
     theme: {
         extend: {
@@ -57,4 +61,6 @@ export default {
             charts: true,
         }),
     ],
+
+
 };
