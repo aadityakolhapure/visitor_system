@@ -152,7 +152,7 @@
                         @endforeach
                     </select>
                 </div>
-    
+
                 <div class="mb-4">
                     <label for="meet" class="block text-gray-700 text-sm font-bold mb-2">Whom to Meet:</label>
                     <select id="meet" name="meet" required
@@ -243,7 +243,7 @@
                 handleSuccess(stream);
             } catch (err) {
                 console.error("First attempt failed:", err);
-                
+
                 // If first attempt fails, try with basic constraints
                 try {
                     const basicStream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -264,7 +264,7 @@
 
         function handleError(err) {
             let errorMessage = "Camera access failed: ";
-            
+
             switch(err.name) {
                 case 'NotReadableError':
                     errorMessage += "The camera is in use by another application or encountered a hardware error. Please: \n" +
@@ -281,7 +281,7 @@
                 default:
                     errorMessage += err.message;
             }
-            
+
             errorAlert.textContent = errorMessage;
             errorAlert.classList.remove('hidden');
             captureButton.disabled = true;
